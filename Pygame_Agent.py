@@ -12,8 +12,6 @@ class Agent():
         self.position = pygame.Vector2(x, y)
         self.velocity = pygame.Vector2(0, 0)
         self.acceleration = pygame.Vector2(0, 0)
-
-        self.sight_range = 100
     
     def moveToTarget(self, vec_target):
         distance = pygame.math.Vector2(vec_target - self.position)
