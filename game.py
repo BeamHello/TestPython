@@ -1,28 +1,37 @@
 import pygame
+import random
 
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
-running = True
+WIDTH = 1280
+HEIGH = 720
 
 class Agent():
     def __init__(self, x, y) -> None:
         self.position = pygame.Vector2(x, y)
-        self.velocity = pygame.Vector2(1, 0)
+        self.velocity = pygame.Vector2(0, 0)
         self.acceleration = pygame.Vector2(0, 0)
-
-        self.sight_range = 100
+        self.mass = 1
     
     def update(self):
         self.velocity = self.velocity + self.acceleration
         self.position = self.position + self.velocity
         self.acceleration = pygame.Vector2(0, 0)
     
+    def apply_force(self, x, y):
+        force = pygame.Vector2(x, y)
+        self.acceleration = self.acceleration + (force / self.mass)
+    
     def draw(self):
         pygame.draw.circle(screen, "red", self.position, 10)
 
-agent1 = Agent(300, 200)
+agents = []
+for i in range(100):
+    agents.append(Agent(random.uniform(0, WIDTH), random.uniform(0, HEIGH)))
+
+# pygame setup
+pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGH))
+clock = pygame.time.Clock()
+running = True
 
 ## ------- Game Loop ------------
 while running:
@@ -32,8 +41,9 @@ while running:
         
     screen.fill("gray")
 
-    agent1.update()
-    agent1.draw()
+    for agent in agents:
+        agent.update()
+        agent.draw()
 
     pygame.display.flip()
 
