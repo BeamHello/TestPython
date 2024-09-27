@@ -159,8 +159,6 @@ class Obstacle:
     def __init__(self, x, y) -> None:
         self.position = pygame.Vector2(x, y)
 
-        self.sign_range = 40
-
         self.frame_size = 64
         self.fx = 0
         self.fy = 0
