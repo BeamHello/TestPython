@@ -9,13 +9,13 @@ MAX_SPEED = 5
 SEPARATION_FACTOR = 0.1
 ALIGNMENT_FACTOR = 0.1
 COHERENCE_FACTOR = 0.01
-SEPARATION_DIST = 100
+SEPARATION_DIST = 70
 
 NUMBER_AGENT = 20
 NUMBER_OBSTACLE = 5
 
 MAX_HUNGRY = 100
-FOOD_COOLDOWN = 200
+FOOD_COOLDOWN = 150
 
 class Agent:
     def __init__(self, x, y) -> None:
@@ -60,8 +60,11 @@ class Agent:
 
             if dist <= self.sign_food:
                 foods.remove(food)
-                self.hungry_value = min(MAX_HUNGRY, self.hungry_value + 5)
-            elif dist <= self.sign_range * 3:
+                self.hungry_value += 5
+                if self.hungry_value > 100:
+                    self.hungry_value = MAX_HUNGRY
+            
+            elif dist <= self.sign_range * 5:
                 energy = dist / self.sign_range * 3
                 max_speed = 1
                 speed = energy * max_speed
@@ -75,15 +78,13 @@ class Agent:
             distance = vec_target - self.position
             dist = distance.magnitude()
 
-            if dist <= self.sign_range:
+            if dist <= self.sign_range * 3:
                 energy = 1 - (dist / self.sign_range)
                 max_speed = 1
                 speed = energy * max_speed
                 distance.normalize() * speed
                 flee_force = distance
-                self.apply_force(flee_force.x, flee_force.y)
-
-                self.hungry_value -= 1
+                self.apply_force(-flee_force.x, -flee_force.y)
     
     def coherence(self, agents):
         center_of_mass = pygame.Vector2(0, 0)
@@ -130,7 +131,7 @@ class Agent:
     def hungry(self):
         self.hungry_timer += 1
         if self.hungry_timer >= 20:
-            self.hungry_value = max(0, self.hungry_value - 1)
+            self.hungry_value -= 1
             self.hungry_timer = 0
 
     def update(self):
@@ -144,14 +145,14 @@ class Agent:
         self.acceleration = pygame.Vector2(0, 0)
     
     def render(self):
-        #pygame.draw.circle(screen, "blue", self.position, 20)
-        #pygame.draw.circle(screen, "red", self.position, self.sign_range * 3, 1)
         screen.blit(self.agent_frame, self.position - pygame.Vector2(32, 32))
 
-        if self.hungry_value >= 50:
-            hungry_text = font.render(f'Hungry: {self.hungry_value}', True, "black")
-        if self.hungry_value < 50:
+        if self.hungry_value < 30:
             hungry_text = font.render(f'Hungry: {self.hungry_value}', True, "red")
+        elif self.hungry_value < 50:
+            hungry_text = font.render(f'Hungry: {self.hungry_value}', True, "orange")
+        elif self.hungry_value >= 50:
+            hungry_text = font.render(f'Hungry: {self.hungry_value}', True, "white")
         screen.blit(hungry_text, (self.position.x - 25, self.position.y - 50))
 
 class Obstacle:
@@ -182,8 +183,8 @@ class Obstacle:
         self.animation()
     
     def render(self):
-        pygame.draw.circle(screen, "red", self.position, self.sign_range, 1)
-        screen.blit(self.obstacle_frame, self.position  - pygame.Vector2(32, 32))
+        self.obstacle_frame = pygame.transform.scale(self.obstacle_frame, (100, 100))
+        screen.blit(self.obstacle_frame, self.position  - pygame.Vector2(50, 50))
 
 class Food:
     def __init__(self, x, y) -> None:
@@ -227,7 +228,7 @@ agents = [Agent(random.uniform(0, WIDTH), random.uniform(0, HEIGH))
           for _ in range(NUMBER_AGENT)]
 
 obstacle_sprite = pygame.image.load("Sprite2D/FishTank/SpriteBlackHole.png")
-obstacles = [Obstacle(random.uniform(100, WIDTH), random.uniform(100, HEIGH))
+obstacles = [Obstacle(random.uniform(100, WIDTH-100), random.uniform(100, HEIGH-100))
           for _ in range(NUMBER_OBSTACLE)]
 
 food_sprite = pygame.image.load("Sprite2D/FishTank/SpriteFood.png")
@@ -257,15 +258,14 @@ while running:
                 foods.append(food)
                 cooldown_spawnTime = current_time
 
-    
-    screen.fill("paleturquoise1")
+    screen.fill("skyblue4")
 
     mousePosition = pygame.mouse.get_pos()
-    pygame.draw.circle(screen, "black", mousePosition, 5, 2)
+    pygame.draw.circle(screen, "aqua", mousePosition, 5, 2)
 
     for agent in agents:
-        agent.seeking(foods)
         agent.fleeObstacle(obstacles)
+        agent.seeking(foods)
         agent.coherence(agents)
         agent.separation(agents)
         agent.alignment(agents)
