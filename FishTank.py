@@ -65,7 +65,7 @@ class Agent:
                     self.hungry_value = MAX_HUNGRY
             
             elif dist <= self.sign_range * 5:
-                energy = dist / self.sign_range * 3
+                energy = dist / self.sign_range * 5
                 max_speed = 1
                 speed = energy * max_speed
                 distance.normalize() * speed
@@ -79,7 +79,7 @@ class Agent:
             dist = distance.magnitude()
 
             if dist <= self.sign_range * 3:
-                energy = 1 - (dist / self.sign_range)
+                energy = 1 - (dist / self.sign_range * 3)
                 max_speed = 1
                 speed = energy * max_speed
                 distance.normalize() * speed
