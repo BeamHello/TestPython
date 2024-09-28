@@ -148,12 +148,13 @@ class Agent:
         screen.blit(self.agent_frame, self.position - pygame.Vector2(32, 32))
 
         if self.hungry_value < 30:
-            hungry_text = font.render(f'Hungry: {self.hungry_value}', True, "red")
+            hungry_text = font.render(f"Hungry: {self.hungry_value}", True, "red")
         elif self.hungry_value < 50:
-            hungry_text = font.render(f'Hungry: {self.hungry_value}', True, "orange")
+            hungry_text = font.render(f"Hungry: {self.hungry_value}", True, "orange")
         elif self.hungry_value >= 50:
-            hungry_text = font.render(f'Hungry: {self.hungry_value}', True, "white")
+            hungry_text = font.render(f"Hungry: {self.hungry_value}", True, "white")
         screen.blit(hungry_text, (self.position.x - 25, self.position.y - 50))
+
 
 class Obstacle:
     def __init__(self, x, y) -> None:
@@ -233,11 +234,14 @@ food_sprite = pygame.image.load("Sprite2D/FishTank/SpriteFood.png")
 foods = []
 cooldown_spawnTime = 0
 
+background_sprite = pygame.image.load("Sprite2D/FishTank/SpriteBackground.png")
+background_sprite = pygame.transform.scale(background_sprite, (1280, 720))
+
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGH))
 clock = pygame.time.Clock()
-manager = pygame_gui.UIManager((WIDTH, HEIGH)) # GUI
+gui_manager = pygame_gui.UIManager((WIDTH, HEIGH)) # GUI
 font = pygame.font.SysFont("Arial", 12) # font
 running = True
 
@@ -257,7 +261,8 @@ while running:
                 cooldown_spawnTime = current_time
 
     screen.fill("skyblue4")
-
+    #screen.blit(background_sprite, (0, 0))
+    
     mousePosition = pygame.mouse.get_pos()
     pygame.draw.circle(screen, "aqua", mousePosition, 5, 2)
 
@@ -290,6 +295,12 @@ while running:
         food.update()
         food.render()
     
+    fps = int(clock.get_fps())
+    fps_text = font.render(f"FPS: {fps}", True, "white")
+    screen.blit(fps_text, (WIDTH - fps_text.get_width() - 10, 10))
+
+    gui_manager.draw_ui(screen)
+
     pygame.display.flip()
 
     clock.tick(60)
