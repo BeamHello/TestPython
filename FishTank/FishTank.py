@@ -222,19 +222,19 @@ class Food:
     def render(self):
         screen.blit(self.food_frame, self.position  - pygame.Vector2(8, 8))
 
-agent_sprite = pygame.image.load("Sprite2D/FishTank/SpriteFish.png")
+agent_sprite = pygame.image.load("Sprite2D/SpriteFish.png")
 agents = [Agent(random.uniform(0, WIDTH), random.uniform(0, HEIGH))
           for _ in range(NUMBER_AGENT)]
 
-obstacle_sprite = pygame.image.load("Sprite2D/FishTank/SpriteBlackHole.png")
+obstacle_sprite = pygame.image.load("Sprite2D/SpriteBlackHole.png")
 obstacles = [Obstacle(random.uniform(100, WIDTH-100), random.uniform(100, HEIGH-100))
           for _ in range(NUMBER_OBSTACLE)]
 
-food_sprite = pygame.image.load("Sprite2D/FishTank/SpriteFood.png")
+food_sprite = pygame.image.load("Sprite2D/SpriteFood.png")
 foods = []
 cooldown_spawnTime = 0
 
-background_sprite = pygame.image.load("Sprite2D/FishTank/SpriteBackground.png")
+background_sprite = pygame.image.load("Sprite2D/SpriteBackground.png")
 background_sprite = pygame.transform.scale(background_sprite, (1280, 720))
 
 # pygame setup
