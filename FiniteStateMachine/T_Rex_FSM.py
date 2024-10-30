@@ -217,15 +217,14 @@ class Dino_Attack(Dino_State):
 
 class Dino_Dead(Dino_State):
     def enter(self, dino):
+        dino.current_anim = dino_dead_anim
         dino.anim_timer = 0
 
     def update(self, dino, prey):
-        if dino.hp_value <= 0:
-            dino.current_anim = dino_dead_anim
-            dino.anim_timer += 1
-            if dino.anim_timer > TIME_DEAD:
-                dino.anim_timer = 0
-                dino.alive = False
+        dino.anim_timer += 1
+        if dino.anim_timer > TIME_DEAD:
+            dino.anim_timer = 0
+            dino.alive = False
     
     def exit(self, dino):
         pass
