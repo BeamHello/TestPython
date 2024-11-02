@@ -1,37 +1,44 @@
 num_node = 5
-neighbours_node =  [
-    [1, 2],
+graph =  [
+    [1, 2], #neighbors node that connects node 0
     [0, 4],
     [0, 3],
-    [1, 4],
-    [1, 2, 3]
+    [1, 2, 4],
+    [1, 2, 3],
 ]
-count = 0
-components = [-1] * num_node
-visited = [False] * num_node
+count = 0 #label when visit that node
+components = [-1] * num_node #value each node before is visited, set to -1
+visited = [False] * num_node #set node isn't visited is False
+
+'''def DFS(at):
+    #check node is visited
+    if visited[at]:
+        return
+    visited[at] = True
+    print(f"Visited node {at}")
+    neighbours = graph[at]
+    #go to next node
+    for next in neighbours:
+        DFS(next)'''
 
 def FindComponets():
     global count
     for i in range(num_node):
+        #check node is visited (not visit, count +1)
         if not visited[i]:
             count += 1
             DFS(i)
     return count, components
 
 def DFS(at):
-    if visited[at]:
-        return
     visited[at] = True
-    #print(f"Visited node {at}")
-    #neighbours = neighbours_node[at]
-    #for next in neighbours:
-    #    DFS(next)
-    components[at] = count
+    components[at] = count #label when node is visited
     print(f"Visited node {at}, Componet node {components}, count {count}")
-    for next in neighbours_node[at]:
+    #go to next node
+    for next in graph[at]:
         if not visited[next]:
             DFS(next)
 
-#start_node = 0
-#DFS(start_node)
+start_node = 0
+DFS(start_node)
 FindComponets()

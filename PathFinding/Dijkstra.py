@@ -19,40 +19,39 @@ def Dijkstra(graph, num_node, start):
     prev = [None] * num_node
 
     priority_queue = []
-    heapq.heappush(priority_queue, (0, start))
+    heapq.heappush(priority_queue, (0, start)) #enqueue
 
-    while len(priority_queue) != 0:
-        minValue, index = heapq.heappop(priority_queue)
+    while len(priority_queue) != 0: #priority_queue size != 0
+        minValue, index = heapq.heappop(priority_queue) #dequeue (node:index, short dist:minValue)
         visited[index] = True
         if dist[index] < minValue:
             continue
         for edge in graph[index]:
             if visited[edge['to']]:
                 continue
-            newDist = dist[index] + edge['cost']
+            newDist = dist[index] + edge['cost'] #dist to neighbour + cost
+            #update: short dist, previous node
             if newDist < dist[edge['to']]:
                 dist[edge['to']] = newDist
                 prev[edge['to']] = index
-                if priority_queue not in edge['to']:
-                    heapq.heappush(priority_queue, (edge['to'], newDist))
-                else:
-                    heapq.heapify(priority_queue)
+                heapq.heappush(priority_queue, (newDist, edge['to'])) #enqueue
     return dist, prev
 
 def findShortesrPath(graph, num_node, start, end):
     dist, prev = Dijkstra(graph, num_node, start)
     path = []
 
-    if dist[end] == float('inf'):
+    if dist[end] == float('inf'): #check dist to end is infinity
         return path
+    #reconstruct path: backtrack end to start
     at = end
-    if at != None:
-        for at in prev[at]:
-            path.append(at)
-        path.reverse()
-        return path
+    while at is not None:
+        path.append(at)
+        at = prev[at]
+    path.reverse()
+    return path
 
-distance = Dijkstra(graph, num_node, start_node)
+distance, _ = Dijkstra(graph, num_node, start_node)
 shortest_path = findShortesrPath(graph, num_node, start_node, end_node)
-print("Shortest distance:", distance)
-print("Shortest path:", shortest_path)
+print("Summary shortest distance:", distance[end_node])
+print("Shortest node path:", shortest_path)
