@@ -15,7 +15,7 @@ TIME_PATRO = 500
 TIME_HUNGRY = 50
 TIME_DEAD = 35
 TIME_RESPAWN = 150
-TIME_DMG = 10
+TIME_DMG = 1
 HP_VALUE = 100
 HUNGRY_VALUE = 100
 
@@ -305,7 +305,7 @@ class Dino():
             self.hungry_value = 0
             self.dmg_hungry_timer += 1
             if self.dmg_hungry_timer > TIME_DMG:
-                self.hp_value -= 10
+                self.hp_value -= 1
                 self.dmg_hungry_timer = 0
     
     def hp(self, prey):
