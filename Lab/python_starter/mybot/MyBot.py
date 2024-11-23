@@ -17,6 +17,8 @@ import random
 #   (print statements) are reserved for the engine-bot communication.
 import logging
 
+import heapq
+
 """ <<<Game Begin>>> """
 
 game = hlt.Game()
@@ -93,7 +95,8 @@ while True:
             
             # A*
             source = ship.position
-            target = me.shipyard.location()
+            target = me.shipyard.position
+            #target = me.shipyard.location()
             open = [source]
             close = [] # node is evaluated
             come_from = {}
@@ -124,8 +127,12 @@ while True:
                 neighbors = getNeighbors(current_node)
                 for neighbor in neighbors:
                     # add neighbor in openset
+                    open.append(neighbor)
                     # calculate fScore
-                    pass
+                    #hScore = neighbor.distance(target)
+                    fScore[neighbor] = gScore[neighbor] + hScore
+                    come_from[neighbor] = current_node
+                    #pass
 
             # check ship
             if game_map[ship.position.directional_offset(cmd)].is_occupied:
