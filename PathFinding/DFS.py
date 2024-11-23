@@ -6,20 +6,10 @@ graph =  [
     [1, 2, 4],
     [1, 2, 3],
 ]
+
 count = 0 #label when visit that node
 components = [-1] * num_node #value each node before is visited, set to -1
 visited = [False] * num_node #set node isn't visited is False
-
-'''def DFS(at):
-    #check node is visited
-    if visited[at]:
-        return
-    visited[at] = True
-    print(f"Visited node {at}")
-    neighbours = graph[at]
-    #go to next node
-    for next in neighbours:
-        DFS(next)'''
 
 def FindComponets():
     global count

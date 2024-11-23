@@ -145,7 +145,7 @@ while True:
                 ship_stage[ship.id] = 'go_to_collect'
                 logging.info("change to go collect")
 
-    if game.turn_number <= 10 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
+    if game.turn_number <= 50 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
     elif game.turn_number < 200:
         pass
