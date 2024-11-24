@@ -83,7 +83,7 @@ while True:
             d.x = me.shipyard.position.x - ship.position.x
             d.y = me.shipyard.position.y - ship.position.y
             
-            '''cmd = Direction.Still
+            cmd = Direction.Still
             if d.x > 0:
                 cmd = Direction.East
             elif d.x < 0:
@@ -91,10 +91,10 @@ while True:
             elif d.y > 0:
                 cmd = Direction.South
             elif d.y < 0:
-                cmd = Direction.North'''
+                cmd = Direction.North
             
             # A*
-            source = ship.position
+            '''source = ship.position
             target = me.shipyard.position
             #target = me.shipyard.location()
             open = [source]
@@ -131,8 +131,9 @@ while True:
                     # calculate fScore
                     #hScore = neighbor.distance(target)
                     fScore[neighbor] = gScore[neighbor] + hScore
+                    #abs(target - source)
                     come_from[neighbor] = current_node
-                    #pass
+                    #pass'''
 
             # check ship
             if game_map[ship.position.directional_offset(cmd)].is_occupied:
@@ -145,10 +146,10 @@ while True:
                 ship_stage[ship.id] = 'go_to_collect'
                 logging.info("change to go collect")
 
-    if game.turn_number <= 50 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
+    if game.turn_number <= 5 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
         command_queue.append(me.shipyard.spawn())
-    elif game.turn_number < 200:
-        pass
+    elif game.turn_number > 50 and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied:
+        command_queue.append(me.shipyard.spawn())
 
     else:
         # last game
